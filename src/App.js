@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import * as ProductAPI from './API/productApi';
+import ProductList from './components/ProductList/ProductList';
 import './App.css';
 
 class App extends Component {
+
+  state = {
+    products: []
+  }
+
+  componentDidMount() {
+    ProductAPI.getProducts()
+      .then( response => {
+        if (Array.isArray(response.data.groups)) {
+          this.setState({products: response.data.groups});
+        }
+      });
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+        <header className="header">
+          <h2 className="title">Home Decor</h2>
         </header>
+        <ProductList products={this.state.products} />
       </div>
     );
   }
